@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>InclusiCare - Your Safe Space</title>
+    <meta name="description" content="InclusiCare - A safe, anonymous space for mental wellness and emotional healing.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Quicksand:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Subtle Decorative Background -->
+    <div class="decorative-bg">
+        <svg class="blob blob-1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#D4A373"
+                d="M60.5,-35.1C72.1,-19.1,69.5,6.5,56,26.4C42.5,46.2,18.1,60.3,-5.7,63.6C-29.5,66.9,-52.7,59.3,-64,40.9C-75.3,22.6,-74.6,-6.6,-59.8,-27.2C-45.1,-47.9,-16.1,-60.1,6.5,-63.8C29.1,-67.5,50,-62.7,60.5,-35.1Z"
+                transform="translate(100 100)"></path>
+        </svg>
+        <svg class="blob blob-2" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#A3B18A"
+                d="M54.5,-45.5C69.5,-29.4,79.9,-5.8,75,13.6C70.1,33,50,48.2,28.4,56.7C6.8,65.3,-16.4,67.3,-33.1,57.5C-49.8,47.8,-60.1,26.4,-61,-4.5C-62,-35.4,-53.5,-65.7,-35.3,-80.4C-17.1,-95.1,10.8,-94.3,39.4,-61.5Z"
+                transform="translate(100 100)"></path>
+        </svg>
+    </div>
+
+    <!-- App Container (100vh) -->
+    <div class="app-wrapper">
+
+        <!-- Top Navigation -->
+        <nav class="navbar glass-card-nav">
+            <button class="menu-toggle" aria-label="Open Menu">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="logo">InclusiCare</div>
+            <button id="theme-toggle" class="theme-toggle">🌙</button>
+        </nav>
+
+        <!-- Slide-in Side Panel -->
+        <aside class="side-panel">
+            <button class="close-menu" aria-label="Close Menu">&times;</button>
+            <ul class="side-nav-links">
+                <li><a href="#home" data-page="home">Home</a></li>
+                <li><a href="#companion" data-page="companion">AI Companion</a></li>
+                <li><a href="#journal" data-page="journal">Smart Journal</a></li>
+                <li><a href="#wellbeing" data-page="wellbeing">Mood Tracker</a></li>
+                <li><a href="#soundscapes" data-page="soundscapes">Soundscapes</a></li>
+                <li><a href="#privacy" data-page="privacy">Privacy</a></li>
+            </ul>
+        </aside>
+        <div class="side-panel-overlay"></div>
+
+        <!-- Main Content Area -->
+        <main id="main-content" class="content-viewport">
+
+            <!-- Home Page -->
+            <section id="home" class="page-section active">
+                <div class="view-center">
+                    <h1 id="greeting-text">Welcome to your space.</h1>
+                    <p id="daily-affirmation" class="affirmation-text">Loading comforting thought...</p>
+                    <button class="cta-button" data-link="companion">Let's Talk</button>
+                </div>
+            </section>
+
+            <!-- AI Companion Page -->
+            <section id="companion" class="page-section">
+                <div class="app-card chat-view">
+                    <div class="chat-header">
+                        <h2>Your Safe Chat Space</h2>
+                        <p>I'm here with you.</p>
+                    </div>
+                    <div id="chat-window" class="chat-window">
+                        <div class="message bot-message">
+                            Hello... I'm really glad you're here. How is your heart doing today?
+                        </div>
+                    </div>
+                    <div class="chat-bottom">
+                        <div class="quick-replies hide-scrollbar">
+                            <button class="chip" onclick="sendQuickReply('I feel anxious')">I feel anxious</button>
+                            <button class="chip" onclick="sendQuickReply('I need a distraction')">I need a
+                                distraction</button>
+                            <button class="chip" onclick="sendQuickReply('Just venting')">Just venting</button>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="user-input" placeholder="Just pour it out..."
+                                aria-label="Type your message">
+                            <button id="send-btn" class="send-icon-btn">↗</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Smart Journal Page -->
+            <section id="journal" class="page-section">
+                <div class="app-card journal-view">
+                    <div class="journal-header">
+                        <input type="text" id="journal-title-input" class="journal-title-edit"
+                            placeholder="Name your journal (e.g., Quiet Corner)">
+                    </div>
+
+                    <textarea id="journal-entry" class="journal-textarea"
+                        placeholder="Want to tell me what today felt like?"></textarea>
+
+                    <div class="journal-toolbar">
+                        <div class="mood-tags hide-scrollbar">
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="calm"><span>😌
+                                    Calm</span></label>
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="happy"><span>🙂
+                                    Happy</span></label>
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="hopeful"><span>🌱
+                                    Hopeful</span></label>
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="grateful"><span>🙏
+                                    Grateful</span></label>
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="motivated"><span>🔥
+                                    Motivated</span></label>
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="tired"><span>😴
+                                    Tired</span></label>
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="bored"><span>😐
+                                    Bored</span></label>
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="thoughtful"><span>🤔
+                                    Thoughtful</span></label>
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="sad"><span>😔
+                                    Sad</span></label>
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="anxious"><span>😟
+                                    Anxious</span></label>
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="stressed"><span>😣
+                                    Stressed</span></label>
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="overwhelmed"><span>😵
+                                    Overwhelmed</span></label>
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="lonely"><span>🥀
+                                    Lonely</span></label>
+                            <label class="mood-chip"><input type="radio" name="j-mood" value="angry"><span>😠
+                                    Angry</span></label>
+                        </div>
+                    </div>
+
+                    <div class="journal-actions">
+                        <button id="save-journal" class="soft-btn">Save Entry</button>
+                        <button id="view-insights-btn" class="soft-btn" style="margin-left:10px;">View Emotional Insights</button>
+                        <span id="journal-status"></span>
+                    </div>
+
+                    <div class="journal-history-list hide-scrollbar" id="past-entries">
+                        <!-- Entries -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Wellbeing Tracking Page -->
+            <section id="wellbeing" class="page-section">
+                <div class="app-card wellbeing-view">
+                    <h2>Daily Check-in</h2>
+                    <div class="mood-slider-container">
+                        <input type="range" id="mood-slider" min="0" max="100" value="50">
+                        <p class="mood-label"><span id="mood-value">Neutral</span></p>
+                    </div>
+                    <button id="log-mood" class="soft-btn polished-btn full-width">Save Emotion</button>
+
+                    <div class="mood-history-view">
+                        <h3>Your Timeline</h3>
+                        <div id="mood-chart" class="mood-chart">
+                            <!-- Bars -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Soundscapes Page -->
+            <section id="soundscapes" class="page-section">
+                <div class="app-card soundscape-view view-center">
+                    <h2>Soundscapes</h2>
+                    <p class="sub-text">Choose a calming environment.</p>
+                    <div class="sound-grid">
+                        <button class="sound-select-btn glass-btn" data-sound="rain">🌧️ Rain</button>
+                        <button class="sound-select-btn glass-btn" data-sound="forest">🌲 Forest</button>
+                        <button class="sound-select-btn glass-btn" data-sound="waves">🌊 Waves</button>
+                        <button class="sound-select-btn glass-btn" data-sound="whiteNoise">📻 Noise</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Privacy Page -->
+            <div id="privacy" class="page-section privacy-page">
+                <div class="privacy-card">
+                    <div class="privacy-icon">🔒</div>
+                    <h2>Privacy First</h2>
+                    <p class="privacy-sub">Your sanctuary is offline.</p>
+
+                    <ul class="privacy-list">
+                        <li>Stored locally on this device</li>
+                        <li>No servers, no tracking</li>
+                        <li>Anonymous by design</li>
+                    </ul>
+
+                    <div class="privacy-footer">
+                        Built with care. Nothing leaves your space.
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Floating UI Elements -->
+
+        <!-- Soundscapes Floating Component (Bottom Left) -->
+        <div id="soundscape-container" class="soundscape-container">
+            <div id="soundscape-panel" class="soundscape-panel hidden">
+                <button class="sound-option-btn" data-sound="rain">🌧️ Gentle Rain</button>
+                <button class="sound-option-btn" data-sound="forest">🌲 Forest</button>
+                <button class="sound-option-btn" data-sound="waves">🌊 Waves</button>
+                <button class="sound-option-btn" data-sound="whiteNoise">📻 White Noise</button>
+            </div>
+            <button id="soundscape-toggle-btn" class="soundscape-toggle-btn soft-btn">Soundscapes</button>
+        </div>
+
+        <!-- Panic Button (Bottom Right) -->
+        <button id="panic-btn" class="panic-button-fab" aria-label="SOS">SOS</button>
+
+    </div> <!-- End App Wrapper -->
+
+    <!-- Overlays -->
+
+    <!-- Panic Overlay -->
+    <div id="panic-overlay" class="panic-overlay hidden">
+        <div class="breathing-container">
+            <div class="breathing-circle"></div>
+            <p id="breathing-text">Inhale...</p>
+        </div>
+        <button id="close-panic" class="close-panic-btn">I'm okay now</button>
+    </div>
+
+    <!-- Crisis Modal Overlay -->
+    <div id="crisis-modal" class="modal-overlay hidden">
+        <div class="modal-card crisis-theme">
+
+            <!-- Calm focus glow -->
+            <div class="crisis-focus"></div>
+
+            <h3>You are not alone.</h3>
+            <p>Please stay with us. Help is here.</p>
+
+            <div class="helpline-box">
+                <p>911 / 112 (Emergency)</p>
+                <p>988 (Prevention)</p>
+                <p>Text HELLO to 741741 (Crisis)</p>
+            </div>
+
+            <button id="close-crisis-modal" class="safe-btn">I am safe for now</button>
+
+        </div>
+    </div>
+
+    <div id="mood-toast" class="mood-toast hidden">
+        Emotion gently saved ✨
+    </div>
+
+    <!-- Mood Insights Modal -->
+    <div id="insights-modal" class="modal-overlay hidden">
+        <div class="modal-card soft-theme insights-card">
+            <h3>Your Emotional Patterns</h3>
+            <div class="insight-grid">
+                <div class="insight-card">
+                    <p class="insight-label">Most frequent mood</p>
+                    <p id="insight-most-mood" class="insight-value">—</p>
+                </div>
+                <div class="insight-card">
+                    <p class="insight-label">Entries written</p>
+                    <p id="insight-entry-count" class="insight-value">—</p>
+                </div>
+                <div class="insight-card">
+                    <p class="insight-label">Emotional balance</p>
+                    <p id="insight-balance" class="insight-value">—</p>
+                </div>
+            </div>
+            <button id="close-insights" class="safe-btn">Close</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
