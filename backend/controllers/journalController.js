@@ -1,10 +1,8 @@
 const { analyzeSentiment } = require('../utils/sentimentAnalyzer');
-
-// Temporary storage (instead of database)
-let journalEntries = [];
+const JournalEntry = require('../models/journalEntry');
 
 // Create Journal Entry
-exports.createJournalEntry = (req, res) => {
+exports.createJournalEntry = async (req, res) => {
     try {
         const { text, mood } = req.body;
 
@@ -17,18 +15,17 @@ exports.createJournalEntry = (req, res) => {
         const sentiment = analyzeSentiment(text);
 
         const newEntry = {
-            id: Date.now().toString(),
             text,
             mood: mood || sentiment.mood,
             sentimentScore: sentiment.score,
             createdAt: new Date()
         };
 
-        journalEntries.push(newEntry);
+        const savedEntry = await JournalEntry.create(newEntry);
 
         res.status(201).json({
             success: true,
-            data: newEntry
+            data: savedEntry
         });
 
     } catch (error) {
@@ -41,74 +38,103 @@ exports.createJournalEntry = (req, res) => {
 
 
 // Get All Journal Entries
-exports.getUserJournalEntries = (req, res) => {
-    res.status(200).json({
-        success: true,
-        count: journalEntries.length,
-        data: journalEntries
-    });
+exports.getUserJournalEntries = async (req, res) => {
+    try {
+
+        const entries = await JournalEntry.find().sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            count: entries.length,
+            data: entries
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            error: "Server Error",
+            details: error.message
+        });
+    }
 };
 
 
 // Delete Entry
-exports.deleteJournalEntry = (req, res) => {
-    const { id } = req.params;
+exports.deleteJournalEntry = async (req, res) => {
+    try {
 
-    const index = journalEntries.findIndex(entry => entry.id === id);
+        const { id } = req.params;
 
-    if (index === -1) {
-        return res.status(404).json({
-            error: "Journal entry not found"
+        const deleted = await JournalEntry.findByIdAndDelete(id);
+
+        if (!deleted) {
+            return res.status(404).json({
+                error: "Journal entry not found"
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "Entry deleted"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            error: "Server Error",
+            details: error.message
         });
     }
-
-    journalEntries.splice(index, 1);
-
-    res.json({
-        success: true,
-        message: "Entry deleted"
-    });
 };
 
 
 // Mood Insights
-exports.getMoodInsights = (req, res) => {
+exports.getMoodInsights = async (req, res) => {
 
-    if (journalEntries.length === 0) {
-        return res.json({
+    try {
+
+        const journalEntries = await JournalEntry.find();
+
+        if (journalEntries.length === 0) {
+            return res.json({
+                success: true,
+                data: {
+                    totalEntries: 0,
+                    mostFrequentMood: null,
+                    positiveVsNegativeRatio: null
+                }
+            });
+        }
+
+        const moodCounts = {};
+        let positive = 0;
+        let negative = 0;
+
+        journalEntries.forEach(entry => {
+
+            moodCounts[entry.mood] = (moodCounts[entry.mood] || 0) + 1;
+
+            if (entry.sentimentScore >= 0.6) positive++;
+            if (entry.sentimentScore <= 0.4) negative++;
+
+        });
+
+        let mostFrequentMood = Object.keys(moodCounts).reduce((a, b) =>
+            moodCounts[a] > moodCounts[b] ? a : b
+        );
+
+        res.json({
             success: true,
             data: {
-                totalEntries: 0,
-                mostFrequentMood: null,
-                positiveVsNegativeRatio: null
+                totalEntries: journalEntries.length,
+                mostFrequentMood,
+                positiveEntries: positive,
+                negativeEntries: negative
             }
         });
+
+    } catch (error) {
+        res.status(500).json({
+            error: "Server Error",
+            details: error.message
+        });
     }
-
-    const moodCounts = {};
-    let positive = 0;
-    let negative = 0;
-
-    journalEntries.forEach(entry => {
-
-        moodCounts[entry.mood] = (moodCounts[entry.mood] || 0) + 1;
-
-        if (entry.sentimentScore >= 0.6) positive++;
-        if (entry.sentimentScore <= 0.4) negative++;
-
-    });
-
-    let mostFrequentMood = Object.keys(moodCounts).reduce((a, b) =>
-        moodCounts[a] > moodCounts[b] ? a : b
-    );
-
-    res.json({
-        success: true,
-        data: {
-            totalEntries: journalEntries.length,
-            mostFrequentMood,
-            positiveEntries: positive,
-            negativeEntries: negative
-        }
-    });
 };
