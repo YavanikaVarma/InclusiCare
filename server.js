@@ -1,3 +1,4 @@
+// const connectDB = require("./backend/config/db");
 // const express = require('express');
 // const path = require('path');
 // const app = express();
@@ -78,7 +79,7 @@ app.use(express.static(__dirname));
 
 // Default route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname,'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Server Port
