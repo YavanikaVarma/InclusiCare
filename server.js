@@ -10,7 +10,9 @@ dotenv.config();
 const app = express();
 
 // Connect to MongoDB
-connectDB();
+connectDB().catch(err => {
+  console.log("MongoDB not connected, running server without database");
+});
 
 // Middleware
 app.use(cors());
