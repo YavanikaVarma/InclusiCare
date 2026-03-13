@@ -1,20 +1,22 @@
-const { analyzeSentiment } = require('../utils/sentimentAnalyzer');
+const { analyzeSentiment } = require('../utils/sentimentAnalyzer'); 
 const JournalEntry = require('../models/journalEntry');
+const MoodAnalytics = require('../models/moodAnalytics'); // ADDED
 
 // Create Journal Entry
 exports.createJournalEntry = async (req, res) => {
     try {
-        const { text, mood } = req.body;
+        const { text, mood, userId } = req.body;
 
-        if (!text || !mood) {
+        if (!text || !mood || !userId) {
             return res.status(400).json({
-                error: "Please provide both text and mood"
+                error: "Please provide text, mood, and userId"
             });
         }
 
         const sentiment = analyzeSentiment(text);
 
         const newEntry = {
+            userId,
             text,
             mood: mood || sentiment.mood,
             sentimentScore: sentiment.score,
@@ -22,6 +24,26 @@ exports.createJournalEntry = async (req, res) => {
         };
 
         const savedEntry = await JournalEntry.create(newEntry);
+
+        // ADDED: Update Mood Analytics
+        let update = {};
+
+        if (sentiment.score >= 0.6) {
+            update = { $inc: { positiveCount: 1 } };
+        }
+
+        if (sentiment.score <= 0.4) {
+            update = { $inc: { negativeCount: 1 } };
+        }
+
+        if (Object.keys(update).length > 0) {
+            await MoodAnalytics.findOneAndUpdate(
+                { userId },
+                update,
+                { upsert: true, new: true }
+            );
+        }
+        // END ADDED
 
         res.status(201).json({
             success: true,
@@ -37,11 +59,15 @@ exports.createJournalEntry = async (req, res) => {
 };
 
 
-// Get All Journal Entries
+// Get Journal Entries for a User
 exports.getUserJournalEntries = async (req, res) => {
     try {
 
-        const entries = await JournalEntry.find().sort({ createdAt: -1 });
+        const { userId } = req.query;
+
+        const entries = await JournalEntry
+            .find({ userId })
+            .sort({ createdAt: -1 });
 
         res.status(200).json({
             success: true,
@@ -91,7 +117,9 @@ exports.getMoodInsights = async (req, res) => {
 
     try {
 
-        const journalEntries = await JournalEntry.find();
+        const { userId } = req.query;
+
+        const journalEntries = await JournalEntry.find({ userId });
 
         if (journalEntries.length === 0) {
             return res.json({
@@ -99,7 +127,8 @@ exports.getMoodInsights = async (req, res) => {
                 data: {
                     totalEntries: 0,
                     mostFrequentMood: null,
-                    positiveVsNegativeRatio: null
+                    positiveEntries: 0,
+                    negativeEntries: 0
                 }
             });
         }
