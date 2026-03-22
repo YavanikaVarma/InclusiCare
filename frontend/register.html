@@ -24,7 +24,7 @@
             <h1 class="auth-logo">InclusiCare</h1>
             <p class="auth-subtitle">Create an account to begin your journey.</p>
 
-            <form id="register-form" class="auth-form">
+            <form id="register-form" class="auth-form" onsubmit="handleRegister(event)">
                 <div class="auth-input-group">
                     <label for="register-name" class="auth-label">Full Name</label>
                     <input type="text" id="register-name" class="auth-input" placeholder="Enter your full name" required>
@@ -48,6 +48,7 @@
             </div>
         </div>
     </div>
+
 
     <script src="auth.js"></script>
 </body>

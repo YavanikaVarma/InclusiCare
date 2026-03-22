@@ -1,35 +1,34 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const path = require("path");
+require('dotenv').config();
 
-const connectDB = require("./backend/config/db");
+const express = require('express');
+const path = require('path');
+const connectDB = require('./backend/config/db');
 
-dotenv.config();
+const journalRoutes = require('./backend/routes/journalRoutes');
 
 const app = express();
 
-// Connect to MongoDB
+// ✅ Connect Database
 connectDB();
 
-// Middleware
-app.use(cors());
+// ✅ Middleware
+app.use(express.static('frontend', { index: false }));
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/frontend/login.html');
+});
 app.use(express.json());
 
-// Serve frontend static files
-app.use(express.static(path.join(__dirname, "frontend"), { index: false }));
+// ✅ Routes
+app.use('/api', journalRoutes);
 
-// Routes
-const journalRoutes = require("./backend/routes/journalRoutes");
-app.use("/api/journal", journalRoutes);
-
-// Root route (loads frontend)
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend", "login.html"));
-});
-
+// ✅ Server Start
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
+
+
+const authRoutes = require('./backend/routes/authRoutes');
+app.use('/api', authRoutes);
